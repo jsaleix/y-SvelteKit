@@ -6,9 +6,9 @@ export const handle = (async ({ event, resolve }) => {
 	const sid = cookies.get('sid');
 	if (sid) {
 		const session = getSession(sid);
-		console.log(session);
 		if (session) {
 			event.locals.user = {
+				id: session.id,
 				username: session.username,
 				email: session.email,
 				roles: session.roles

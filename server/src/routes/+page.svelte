@@ -1,8 +1,12 @@
 <script>
+	import { page } from '$app/stores';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
 	import { fade, fly } from 'svelte/transition';
 
+	page.subscribe((value) => {
+		// console.log(value);
+	});
 	let selected = 0;
 </script>
 

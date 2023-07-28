@@ -1,9 +1,14 @@
 import authService from '$lib/server/services/auth.service.js';
 import userService from '$lib/server/services/user.service.js';
+import { isNotConnected } from '$lib/server/session-store/restriction.js';
 import { fail, redirect } from '@sveltejs/kit';
 
+export const load = async ({ locals }) => {
+	isNotConnected(locals, '/');
+};
+
 export const actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, locals }) => {
 		const form = await request.formData();
 		const { username, password, email } = Object.fromEntries(form.entries()) as {
 			username: string;

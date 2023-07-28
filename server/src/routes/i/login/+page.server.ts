@@ -1,5 +1,6 @@
 import authService from '$lib/server/services/auth.service.js';
 import { createSession } from '$lib/server/session-store';
+import { isNotConnected } from '$lib/server/session-store/restriction';
 import type { User } from '@prisma/client';
 import { fail, redirect, type Cookies } from '@sveltejs/kit';
 
@@ -9,8 +10,12 @@ const performLogin = (cookies: Cookies, user: User) => {
 	cookies.set('sid', sid, { maxAge, path: '/' });
 };
 
+export const load = async ({ locals }) => {
+	isNotConnected(locals, '/');
+};
+
 export const actions = {
-	default: async ({ request, cookies }) => {
+	default: async ({ request, cookies, locals }) => {
 		const form = await request.formData();
 		const { username, password } = Object.fromEntries(form.entries()) as {
 			username: string;

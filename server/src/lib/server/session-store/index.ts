@@ -2,6 +2,7 @@ import type { User } from '@prisma/client';
 import { randomBytes } from 'node:crypto';
 
 type SessionInfo = {
+	id: string;
 	email: string;
 	username: string;
 	roles: string[];
@@ -22,8 +23,9 @@ export function createSession(user: User, maxAge: number): string {
 		sid = getSid();
 	} while (sessionStore.has(sid));
 
-	const { username, email, roles } = user;
+	const { username, email, roles, id } = user;
 	sessionStore.set(sid, {
+		id,
 		email,
 		username,
 		roles,

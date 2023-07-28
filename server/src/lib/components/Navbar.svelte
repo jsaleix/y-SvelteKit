@@ -3,8 +3,14 @@
 	import * as Icons from '$lib/assets/icons/nav/index';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
+	import NewTweetModal from './NewTweetModal.svelte';
+	import UserTab from './UserTab.svelte';
+	import { button } from './styles/button';
 
 	export let isLogged: boolean = false;
+	let openModal: boolean = false;
+
+	export let username = '';
 
 	const TABS = [
 		{
@@ -34,13 +40,25 @@
 		{
 			label: 'Profile',
 			icon: Icons.profile,
-			url: '/profile',
+			url: '/' + username,
 			needsAuth: true
 		}
 	];
 </script>
 
-<header class={vstack({ gap: '5', alignItems: 'start', w: '15%', borderRight: '1px solid gray' })}>
+<header
+	class={vstack({
+		display: {
+			base: 'none',
+			md: 'flex'
+		},
+		gap: '5',
+		alignItems: 'start',
+		w: '15%',
+		borderRight: '1px solid gray',
+		pr: 5
+	})}
+>
 	<span
 		class={css({
 			h: '25px',
@@ -69,4 +87,14 @@
 			{/if}
 		{/each}
 	</ul>
+	{#if isLogged}
+		<button class={button({ size: 'lg' })} on:click={() => (openModal = true)}>Tweet</button>
+		<div class={css({ marginTop: 'auto', marginBottom: '3', w: 'full' })}>
+			<UserTab />
+		</div>
+	{/if}
 </header>
+
+{#if openModal}
+	<NewTweetModal closeModal={() => (openModal = false)} />
+{/if}
