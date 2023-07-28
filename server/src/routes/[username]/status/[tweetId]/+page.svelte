@@ -1,7 +1,15 @@
 <script lang="ts">
 	export let data;
-
-	console.log(data);
 </script>
 
-<p>This is a tweet</p>
+{#if data.error}
+	<div>{data.error}</div>
+{:else}
+	<div>
+		This is a twett
+		<br />
+		{JSON.stringify(data.user)}
+		<br />
+		{JSON.stringify(data.tweet)}
+	</div>
+{/if}

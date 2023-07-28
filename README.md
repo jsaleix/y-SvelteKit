@@ -3,7 +3,9 @@
 The social network.
 
 ## Technologies
-- SvelteKit
-- PostgreSQL
-- PandaCSS
-- Docker
+
+-   SvelteKit
+-   PostgreSQL
+-   Prisma
+-   PandaCSS
+-   Docker

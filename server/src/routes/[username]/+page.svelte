@@ -1,6 +1,11 @@
 <script lang="ts">
 	export let data;
-	console.log(data.username);
 </script>
 
-<div>Yo</div>
+{#if data.error}
+	<div>{data.error}</div>
+{:else}
+	<div>
+		{JSON.stringify(data.user)}
+	</div>
+{/if}

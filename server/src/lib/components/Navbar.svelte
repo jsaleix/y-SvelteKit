@@ -3,31 +3,39 @@
 	import * as Icons from '$lib/assets/icons/nav/index';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
+
+	export let isLogged: boolean = false;
+
 	const TABS = [
 		{
 			label: 'Home',
 			icon: Icons.house,
-			url: '/'
+			url: '/',
+			needsAuth: false
 		},
 		{
 			label: 'Explore',
 			icon: Icons.explore,
-			url: '/explore'
+			url: '/explore',
+			needsAuth: true
 		},
 		{
 			label: 'Messages',
 			icon: Icons.message,
-			url: '/messages'
+			url: '/messages',
+			needsAuth: true
 		},
 		{
 			label: 'Bookmarks',
 			icon: Icons.bookmark,
-			url: '/bookmarks'
+			url: '/bookmarks',
+			needsAuth: true
 		},
 		{
 			label: 'Profile',
 			icon: Icons.profile,
-			url: '/profile'
+			url: '/profile',
+			needsAuth: true
 		}
 	];
 </script>
@@ -51,12 +59,14 @@
 	</span>
 	<ul class={vstack({ gap: 5, alignItems: 'start' })}>
 		{#each TABS as tab}
-			<li class={css({ bg: 'red' })}>
-				<a href={tab.url} class={hstack({ gap: '4', fontSize: 'xl' })}>
-					<img src={tab.icon} alt={`${tab.label} icon`} />
-					{tab.label}
-				</a>
-			</li>
+			{#if (tab.needsAuth && isLogged) || !tab.needsAuth}
+				<li class={css({ bg: 'red' })}>
+					<a href={tab.url} class={hstack({ gap: '4', fontSize: 'xl' })}>
+						<img src={tab.icon} alt={`${tab.label} icon`} />
+						{tab.label}
+					</a>
+				</li>
+			{/if}
 		{/each}
 	</ul>
 </header>

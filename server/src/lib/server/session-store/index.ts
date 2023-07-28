@@ -1,0 +1,72 @@
+import type { User } from '@prisma/client';
+import { randomBytes } from 'node:crypto';
+
+type SessionInfo = {
+	email: string;
+	username: string;
+	roles: string[];
+	invalidAt: number;
+};
+type Sid = string;
+
+const sessionStore = new Map<Sid, SessionInfo>();
+
+function getSid(): Sid {
+	return randomBytes(32).toString('hex');
+}
+
+export function createSession(user: User, maxAge: number): string {
+	let sid: Sid = '';
+
+	do {
+		sid = getSid();
+	} while (sessionStore.has(sid));
+
+	const { username, email, roles } = user;
+	sessionStore.set(sid, {
+		email,
+		username,
+		roles,
+		invalidAt: Date.now() + maxAge
+	});
+
+	return sid;
+}
+
+export function getSession(sid: Sid): SessionInfo | undefined {
+	const session = sessionStore.get(sid);
+	if (session) {
+		if (Date.now() > session.invalidAt) {
+			sessionStore.delete(sid);
+			return undefined;
+		} else {
+			return session;
+		}
+	} else {
+		console.error('session not found', sid);
+		return undefined;
+	}
+}
+
+export function deleteSession(sid: Sid): void {
+	sessionStore.delete(sid);
+}
+
+// cleaning up expired sessions
+let nextClean = Date.now() + 1000 * 60 * 60; // 1 hour
+
+function clean() {
+	const now = Date.now();
+	for (const [sid, session] of sessionStore) {
+		if (session.invalidAt < now) {
+			sessionStore.delete(sid);
+		}
+	}
+	nextClean = Date.now() + 1000 * 60 * 60; // 1 hour
+}
+
+if (Date.now() > nextClean) {
+	setTimeout(() => {
+		clean();
+	}, 5000);
+}
