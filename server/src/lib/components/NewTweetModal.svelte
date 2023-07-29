@@ -63,7 +63,6 @@
 			});
 			if (!res.ok) throw new Error('Something went wrong');
 			const data = await res.json();
-			console.log(data);
 			window.location.href = `/${user.username}/status/${data.tweetId}`;
 			closeModal();
 		} catch (e: any) {

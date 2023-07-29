@@ -9,7 +9,8 @@ class AuthService {
 			data: {
 				email,
 				username,
-				password
+				password,
+				displayName: username
 			}
 		});
 
