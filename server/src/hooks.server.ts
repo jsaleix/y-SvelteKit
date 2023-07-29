@@ -9,6 +9,8 @@ export const handle = (async ({ event, resolve }) => {
 		if (session) {
 			event.locals.user = {
 				id: session.id,
+				avatar: session.avatar,
+				displayName: session.displayName,
 				username: session.username,
 				email: session.email,
 				roles: session.roles

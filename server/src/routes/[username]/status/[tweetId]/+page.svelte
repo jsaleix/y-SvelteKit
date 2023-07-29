@@ -1,15 +1,15 @@
 <script lang="ts">
+	import TweetItem from '$lib/components/TweetItem.svelte';
+
 	export let data;
+
+	const { tweet } = data;
 </script>
 
-{#if data.error}
+{#if !tweet}
 	<div>{data.error}</div>
 {:else}
 	<div>
-		This is a twett
-		<br />
-		{JSON.stringify(data.user)}
-		<br />
-		{JSON.stringify(data.tweet)}
+		<TweetItem {tweet} />
 	</div>
 {/if}

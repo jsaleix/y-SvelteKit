@@ -17,13 +17,17 @@
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		cursor: 'pointer'
+		cursor: 'pointer',
+		p: {
+			base: 4,
+			md: 0
+		}
 	});
 
 	const innerModalStyle = vstack({
 		cursor: 'default',
 		w: { base: 'full', md: '40%' },
-		h: { base: 'full', md: 'fit-content' },
+		h: { base: 'fit-content', md: 'fit-content' },
 		bg: 'black',
 		rounded: 'xl',
 		p: 4,
@@ -36,7 +40,7 @@
 		outline: 'none',
 		color: 'white',
 		fontSize: 'xl',
-		h: '30%',
+		h: { base: '25vh', md: '30%' },
 		resize: 'none'
 	});
 
@@ -74,13 +78,7 @@
 </script>
 
 <div class={modalStyle} on:click={closeModal}>
-	<form
-		class={innerModalStyle}
-		on:click={(e) => e.stopPropagation()}
-		on:submit={handleSubmit}
-		in:fly={{ y: 20, duration: 500 }}
-		out:fade
-	>
+	<div class={innerModalStyle} in:fly={{ y: 20, duration: 500 }} out:fade>
 		<button on:click={closeModal} class={css({ cursor: 'pointer' })}
 			><svg width="15" height="15" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path
@@ -91,17 +89,23 @@
 				/>
 			</svg>
 		</button>
-		<textarea
-			class={inputStyle}
-			placeholder="What's up?"
-			bind:value={tweetContent.content}
-			maxlength={TWEET_MAX_LENGTH}
-			name="content"
-		/>
-		<div class={divider()} />
-		<div class={hstack({})}>
-			<p class={css({ color: 'gray' })}>{tweetContent.content.length}/{TWEET_MAX_LENGTH}</p>
-			<input disabled={loading} class={button({})} type="submit" value="Tweet" />
-		</div>
-	</form>
+		<form
+			class={vstack({ w: 'full', alignItems: 'start' })}
+			on:click={(e) => e.stopPropagation()}
+			on:submit={handleSubmit}
+		>
+			<textarea
+				class={inputStyle}
+				placeholder="What's up?"
+				bind:value={tweetContent.content}
+				maxlength={TWEET_MAX_LENGTH}
+				name="content"
+			/>
+			<div class={divider()} />
+			<div class={hstack({ w: 'full', justifyContent: 'space-between' })}>
+				<p class={css({ color: 'gray' })}>{tweetContent.content.length}/{TWEET_MAX_LENGTH}</p>
+				<input disabled={loading} class={button({ width: 'auto' })} type="submit" value="Tweet" />
+			</div>
+		</form>
+	</div>
 </div>

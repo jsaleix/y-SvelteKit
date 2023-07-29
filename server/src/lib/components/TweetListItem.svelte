@@ -26,15 +26,20 @@
 		on:click={(e) => e.stopPropagation()}
 		class={css({ w: '45px', h: '45px', bg: 'primary', borderRadius: '45px', overflow: 'hidden' })}
 	>
-		<picture>
+		<picture class={css({ w: 'full', h: 'full' })}>
 			<img
-				class={css({ w: 'full', h: 'full', objectFit: 'cover' })}
+				class={css({
+					w: 'full',
+					h: 'full',
+					objectFit: 'cover',
+					_hover: { transition: '0.5s', opacity: '0.8' }
+				})}
 				src={tweet.user.avatar}
 				alt="avatar"
 			/>
 		</picture>
 	</a>
-	<div class={vstack({ bg: 'none', alignItems: 'start', gap: 1, w: 'full' })}>
+	<div class={vstack({ bg: 'none', alignItems: 'start', gap: 1, w: 'auto' })}>
 		<div class={hstack({ gap: 3, bg: 'none' })}>
 			<p class={css({ fontWeight: 'bold', bg: 'none' })}>{tweet.user.username}</p>
 			<p class={css({ color: 'gray', bg: 'none' })}>

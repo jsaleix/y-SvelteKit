@@ -5,6 +5,8 @@ type SessionInfo = {
 	id: string;
 	email: string;
 	username: string;
+	displayName: string;
+	avatar: string;
 	roles: string[];
 	invalidAt: number;
 };
@@ -23,11 +25,13 @@ export function createSession(user: User, maxAge: number): string {
 		sid = getSid();
 	} while (sessionStore.has(sid));
 
-	const { username, email, roles, id } = user;
+	const { username, email, roles, id, avatar, displayName } = user;
 	sessionStore.set(sid, {
 		id,
 		email,
 		username,
+		displayName,
+		avatar,
 		roles,
 		invalidAt: Date.now() + maxAge
 	});

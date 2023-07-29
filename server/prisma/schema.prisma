@@ -14,7 +14,7 @@ model User {
   id String @id @default(uuid())
   email String @unique
   username String @unique
-  displayName String?
+  displayName String @default("Anon")
   password String
   avatar String @default("/assets/default-pp.jpg")
   createdAt DateTime @default(now())

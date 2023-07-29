@@ -7,7 +7,7 @@ export interface Tweet {
 		id: string;
 		username: string;
 		displayName: string | null;
-		avatar: string | null;
+		avatar: string;
 	};
 	stats: {
 		retweets: number;

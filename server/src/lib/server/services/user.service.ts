@@ -11,7 +11,9 @@ class UserService {
 			},
 			select: {
 				username: true,
-				id: true
+				id: true,
+				avatar: true,
+				displayName: true
 			}
 		});
 		return user;

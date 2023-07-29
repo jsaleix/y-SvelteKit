@@ -95,7 +95,7 @@
 	{#if isLogged}
 		<button class={button({ size: 'lg' })} on:click={() => (openModal = true)}>Tweet</button>
 		<div class={css({ marginTop: 'auto', marginBottom: '3', w: 'full' })}>
-			<UserTab />
+			<UserTab user={$authUser} />
 		</div>
 	{/if}
 </header>

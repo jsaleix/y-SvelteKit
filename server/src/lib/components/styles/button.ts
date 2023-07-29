@@ -35,9 +35,18 @@ export const button = cva({
 			lg: {
 				fontSize: 'lg'
 			}
+		},
+		width: {
+			full: {
+				w: 'full'
+			},
+			auto: {
+				w: 'auto'
+			}
 		}
 	},
 	defaultVariants: {
-		size: 'sm'
+		size: 'sm',
+		width: 'full'
 	}
 });

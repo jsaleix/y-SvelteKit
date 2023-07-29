@@ -7,6 +7,8 @@ declare global {
 			user?: null | {
 				id: string;
 				username: string;
+				avatar: string;
+				displayName: string;
 				email: string;
 				roles: string[];
 			};
