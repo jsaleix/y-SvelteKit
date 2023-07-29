@@ -6,6 +6,7 @@ export const button = cva({
 		w: 'full',
 		rounded: '2xl',
 		py: '2',
+		px: 5,
 		textTransform: 'capitalize',
 		transition: '0.2s',
 		fontWeight: 'bold',

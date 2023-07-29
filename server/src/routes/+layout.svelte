@@ -1,13 +1,15 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
 	import RightCol from '$lib/components/RightCol.svelte';
+	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { container } from 'styled-system/patterns';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
+	export let data = {} as LayoutServerData;
 
-	export let data: LayoutServerData;
-	const username = data.user?.username;
+	const user = data.user;
+	authUser.set(user);
 </script>
 
 <div
@@ -19,7 +21,7 @@
 		paddingY: '10px'
 	})}
 >
-	<Navbar isLogged={!!data.user} {username} />
+	<Navbar />
 	<main class={css({ w: { sm: '100%', md: '55%' }, overflowY: 'scroll' })}>
 		<slot />
 	</main>

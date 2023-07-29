@@ -3,7 +3,7 @@ import userService from '$lib/server/services/user.service.js';
 import { isNotConnected } from '$lib/server/session-store/restriction.js';
 import { fail, redirect } from '@sveltejs/kit';
 
-export const load = async ({ locals }) => {
+export const load = async ({ locals }: { locals: App.Locals }) => {
 	isNotConnected(locals, '/');
 };
 

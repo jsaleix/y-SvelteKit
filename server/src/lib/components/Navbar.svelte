@@ -1,16 +1,17 @@
 <script lang="ts">
 	import logo from '$lib/assets/icons/logo.svg';
 	import * as Icons from '$lib/assets/icons/nav/index';
+	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
 	import NewTweetModal from './NewTweetModal.svelte';
 	import UserTab from './UserTab.svelte';
 	import { button } from './styles/button';
 
-	export let isLogged: boolean = false;
+	const isLogged: boolean = !!$authUser;
 	let openModal: boolean = false;
 
-	export let username = '';
+	const username = $authUser?.username || '';
 
 	const TABS = [
 		{
@@ -59,12 +60,16 @@
 		pr: 5
 	})}
 >
-	<span
+	<a
+		href="/"
 		class={css({
 			h: '25px',
 			w: '25px',
 			objectFit: 'contain',
-			overflow: 'hidden'
+			overflow: 'hidden',
+			_hover: {
+				opacity: '0.7'
+			}
 		})}
 	>
 		<picture>
@@ -74,7 +79,7 @@
 				class={css({ h: '100%', w: '100%', objectFit: 'contain' })}
 			/>
 		</picture>
-	</span>
+	</a>
 	<ul class={vstack({ gap: 5, alignItems: 'start' })}>
 		{#each TABS as tab}
 			{#if (tab.needsAuth && isLogged) || !tab.needsAuth}
