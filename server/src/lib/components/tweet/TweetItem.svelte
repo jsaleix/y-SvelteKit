@@ -1,12 +1,61 @@
 <script lang="ts">
+	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
+	import { onMount } from 'svelte';
 	import type { Tweet } from '../../../interfaces/tweet';
-	import LikeIcon from './LikeIcon.svelte';
-	import ReplyIcon from './ReplyIcon.svelte';
-	import RetweetIcon from './RetweetIcon.svelte';
+	import LikeIcon from './icons/LikeIcon.svelte';
+	import ReplyIcon from './icons/ReplyIcon.svelte';
+	import RetweetIcon from './icons/RetweetIcon.svelte';
 
 	export let tweet: Tweet;
+
+	let isLiked = false;
+	let isRetweeted = false;
+
+	onMount(async () => {
+		if (!$authUser) return;
+		try {
+			const res = await fetch(`/api/tweets/${tweet.id}/like`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await res.json();
+			isLiked = data.isLiked;
+		} catch (e: any) {
+			console.log(e.message);
+		}
+	});
+
+	const handleLike = async (e: MouseEvent) => {
+		e.stopPropagation();
+		e.preventDefault();
+
+		try {
+			if (!$authUser) throw new Error('You must login first');
+			const method = isLiked ? 'DELETE' : 'POST';
+
+			const res = await fetch(`/api/tweets/${tweet.id}/like`, {
+				method,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ userId: $authUser.id })
+			});
+			isLiked = !isLiked;
+			tweet.stats.likes += isLiked ? 1 : -1;
+		} catch (e: any) {
+			console.log(e.message);
+		}
+	};
+
+	const handleRetweet = async (e: MouseEvent) => {
+		e.stopPropagation();
+		e.preventDefault();
+		console.log('retweet');
+	};
 </script>
 
 <div
@@ -62,8 +111,8 @@
 	<div class={divider()} />
 	<div class={hstack({ gap: 10, bg: 'none', w: 'full' })}>
 		<ReplyIcon handleClick={() => null} />
-		<RetweetIcon handleClick={() => null} alreadyRetweeted={false} />
-		<LikeIcon handleClick={() => null} alreadyLiked={false} />
+		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
+		<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
 	</div>
 	<div class={divider()} />
 </div>

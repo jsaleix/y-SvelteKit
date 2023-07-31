@@ -1,24 +1,37 @@
 <script lang="ts">
+	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
 	import type { Tweet } from '../../../interfaces/tweet';
-	import LikeIcon from './LikeIcon.svelte';
-	import ReplyIcon from './ReplyIcon.svelte';
-	import RetweetIcon from './RetweetIcon.svelte';
+	import LikeIcon from './icons/LikeIcon.svelte';
+	import ReplyIcon from './icons/ReplyIcon.svelte';
+	import RetweetIcon from './icons/RetweetIcon.svelte';
 
 	export let tweet: Tweet;
 
-	const handleLike = (e: MouseEvent) => {
+	let isLiked = false;
+	let isRetweeted = false;
+
+	const handleLike = async (e: MouseEvent) => {
 		e.stopPropagation();
 		e.preventDefault();
 
-		console.log('like');
+		try {
+			if (!$authUser) throw new Error('You must login first');
+		} catch (e: any) {
+			console.log(e.message);
+		}
 	};
 
 	const handleRetweet = (e: MouseEvent) => {
 		e.stopPropagation();
 		e.preventDefault();
-		console.log('retweet');
+
+		try {
+			if (!$authUser) throw new Error('You must login first');
+		} catch (e: any) {
+			console.log(e.message);
+		}
 	};
 </script>
 
