@@ -23,7 +23,7 @@ model User {
   tweets Tweet[]
   likes Like[]
   bookmarks Bookmark[]
-  followers Following[] @relation("Follower")
+  followers Following[] @relation("Followers")
   following Following[] @relation("Following")
 }
 
@@ -61,9 +61,9 @@ model Bookmark {
 model Following {
   id String @id @default(uuid())
   followerId String
-  follower User @relation("Follower", fields: [followerId], references: [id])
-  followingId String
-  following User @relation("Following", fields: [followingId], references: [id])
+  follower User @relation("Following", fields: [followerId], references: [id])
+  followedId String
+  followed User @relation("Followers", fields: [followedId], references: [id])
   createdAt DateTime @default(now())
 }
 

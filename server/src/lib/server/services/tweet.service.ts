@@ -78,6 +78,37 @@ class TweetService {
 
 		return tweets;
 	}
+
+	async getTweetsOfFollowedUsers(userId: string): Promise<Tweet[]> {
+		const user = await prisma.user.findUnique({
+			where: { id: userId },
+			include: {
+				following: true
+			}
+		});
+
+		if (!user) throw new Error('User not found');
+
+		const followingUserIds = user.following.map((followedUser) => followedUser.followedId);
+
+		const rawTweets = await prisma.tweet.findMany({
+			where: {
+				OR: [{ creatorId: user.id }, { creatorId: { in: followingUserIds } }]
+			},
+			orderBy: {
+				createdAt: 'desc'
+			}
+		});
+
+		const tweets = await Promise.all(
+			rawTweets.map(async (rawTweet) => {
+				const tweet = await this.getTweet(rawTweet.id);
+				return tweet;
+			})
+		);
+
+		return tweets;
+	}
 }
 
 export default new TweetService();

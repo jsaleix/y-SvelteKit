@@ -1,13 +1,15 @@
-<script>
-	import { page } from '$app/stores';
+<script lang="ts">
+	import TweetListItem from '$lib/components/tweet/TweetListItem.svelte';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
 	import { fade, fly } from 'svelte/transition';
+	import type { PageServerData } from './$types';
 
-	page.subscribe((value) => {
-		// console.log(value);
-	});
-	let selected = 0;
+	let selected = 1;
+
+	export let data: PageServerData;
+
+	const { tweets } = data;
 </script>
 
 <svelte:head>
@@ -66,7 +68,7 @@
 					_hover: { color: 'white', bg: '#252525' }
 				})}
 			>
-				<p class={css({ fontSize: 'lg', bg: 'none' })}>Subscriptions</p>
+				<p class={css({ fontSize: 'lg', bg: 'none' })}>Following</p>
 			</div>
 		</div>
 	</div>
@@ -156,7 +158,13 @@
 				out:fade
 				class={css({ display: 'flex', flexDirection: 'column' })}
 			>
-				<p>Empty</p>
+				{#if !tweets || tweets.length === 0}
+					<div>No tweets yet</div>
+				{:else}
+					{#each tweets as tweet}
+						<TweetListItem {tweet} />
+					{/each}
+				{/if}
 			</div>
 		{/if}
 	</div>

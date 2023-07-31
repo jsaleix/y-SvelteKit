@@ -1,7 +1,7 @@
 import prisma from '$lib/assets/images/prisma';
 
 class FollowService {
-	async followUser(toFollow: string, userId: string) {
+	async followUser(userId: string, toFollow: string) {
 		const userFollowing = await prisma.user.findUnique({
 			where: {
 				id: userId
@@ -21,7 +21,7 @@ class FollowService {
 		let follow = await prisma.following.findFirst({
 			where: {
 				followerId: userId,
-				followingId: toFollow
+				followedId: toFollow
 			}
 		});
 
@@ -29,7 +29,7 @@ class FollowService {
 			follow = await prisma.following.create({
 				data: {
 					followerId: userId,
-					followingId: toFollow
+					followedId: toFollow
 				}
 			});
 		}
@@ -37,7 +37,7 @@ class FollowService {
 		return follow;
 	}
 
-	async unfollowUser(toFollow: string, userId: string) {
+	async unfollowUser(userId: string, toFollow: string) {
 		const userFollowing = await prisma.user.findUnique({
 			where: {
 				id: userId
@@ -57,7 +57,7 @@ class FollowService {
 		let follow = await prisma.following.findFirst({
 			where: {
 				followerId: userId,
-				followingId: toFollow
+				followedId: toFollow
 			}
 		});
 
@@ -83,7 +83,7 @@ class FollowService {
 
 		const followers = await prisma.following.findMany({
 			where: {
-				followingId: userId
+				followedId: userId
 			},
 			include: {
 				follower: true
@@ -96,7 +96,7 @@ class FollowService {
 	async getFollowersCount(userId: string) {
 		const followers = await prisma.following.count({
 			where: {
-				followingId: userId
+				followedId: userId
 			}
 		});
 
@@ -125,9 +125,6 @@ class FollowService {
 		const following = await prisma.following.findMany({
 			where: {
 				followerId: userId
-			},
-			include: {
-				following: true
 			}
 		});
 
@@ -138,7 +135,7 @@ class FollowService {
 		const follow = await prisma.following.findFirst({
 			where: {
 				followerId: userId,
-				followingId
+				followedId: followingId
 			}
 		});
 
