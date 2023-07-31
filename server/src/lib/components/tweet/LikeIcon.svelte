@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { css } from 'styled-system/css';
 
-	export let handleClick = () => {
+	export let handleClick = (e: MouseEvent) => {
 		console.log('clicked');
 	};
 
@@ -13,6 +13,7 @@
 	height="20"
 	fill="white"
 	aria-selected={alreadyLiked}
+	on:click={handleClick}
 	class={css({
 		cursor: 'pointer',
 		bg: 'none',

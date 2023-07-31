@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
 	import { css } from 'styled-system/css';
 
-	export let handleClick = () => {
+	export let handleClick = (e: MouseEvent) => {
 		console.log('clicked');
 	};
 
@@ -9,6 +9,7 @@
 </script>
 
 <svg
+	on:click={handleClick}
 	width="20"
 	height="20"
 	xmlns="http://www.w3.org/2000/svg"

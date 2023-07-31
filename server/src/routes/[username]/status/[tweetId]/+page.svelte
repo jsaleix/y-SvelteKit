@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TweetItem from '$lib/components/TweetItem.svelte';
+	import TweetItem from '$lib/components/tweet/TweetItem.svelte';
 
 	export let data;
 

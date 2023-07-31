@@ -1,6 +1,6 @@
 <script lang="ts">
-	import TweetListItem from '$lib/components/TweetListItem.svelte';
 	import { button } from '$lib/components/styles/button';
+	import TweetListItem from '$lib/components/tweet/TweetListItem.svelte';
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
 	import type { PageServerData } from './$types';

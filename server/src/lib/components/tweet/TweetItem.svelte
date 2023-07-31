@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
-	import type { Tweet } from '../../interfaces/tweet';
-	import LikeIcon from './common/LikeIcon.svelte';
-	import ReplyIcon from './common/ReplyIcon.svelte';
-	import RetweetIcon from './common/RetweetIcon.svelte';
+	import type { Tweet } from '../../../interfaces/tweet';
+	import LikeIcon from './LikeIcon.svelte';
+	import ReplyIcon from './ReplyIcon.svelte';
+	import RetweetIcon from './RetweetIcon.svelte';
 
 	export let tweet: Tweet;
 </script>
@@ -54,6 +54,9 @@
 		</p>
 		<p class={css({ color: 'gray' })}>
 			<span class={css({ color: 'white', fontWeight: 'bold' })}>{tweet.stats.likes}</span> likes
+		</p>
+		<p class={css({ color: 'gray' })}>
+			<span class={css({ color: 'white', fontWeight: 'bold' })}>{tweet.stats.bookmarks}</span> bookmarks
 		</p>
 	</div>
 	<div class={divider()} />
