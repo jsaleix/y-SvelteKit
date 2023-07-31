@@ -12,6 +12,7 @@ export interface Tweet {
 	stats: {
 		retweets: number;
 		likes: number;
+		bookmarks: number;
 	};
 }
 

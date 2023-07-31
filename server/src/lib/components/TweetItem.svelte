@@ -15,7 +15,6 @@
 		gap: 5,
 		w: 'full',
 		transition: '0.5s',
-		border: '1px solid red',
 		alignItems: 'start'
 	})}
 >
