@@ -70,6 +70,7 @@
 		w: 'full',
 		cursor: 'pointer',
 		transition: '0.5s',
+		borderBottom: '1px solid gray',
 		_hover: {
 			bg: 'gray.700'
 		}

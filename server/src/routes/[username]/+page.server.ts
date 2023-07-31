@@ -16,8 +16,8 @@ export async function load({ params, locals }: { params: any; locals: any }) {
 		const followingNb = await followService.getFollowingCount(user.id);
 
 		if (locals.user) {
-			isFollowingYou = await followService.isUserFollowing(locals.user.id, user.id);
-			areYouFollowing = await followService.isUserFollowing(user.id, locals.user.id);
+			isFollowingYou = await followService.isUserFollowing(user.id, locals.user.id);
+			areYouFollowing = await followService.isUserFollowing(locals.user.id, user.id);
 		}
 
 		const tweets = await tweetService.getTweets(user.id);

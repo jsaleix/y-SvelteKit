@@ -80,6 +80,7 @@ class TweetService {
 	}
 
 	async getTweetsOfFollowedUsers(userId: string): Promise<Tweet[]> {
+		//get concerned user
 		const user = await prisma.user.findUnique({
 			where: { id: userId },
 			include: {
@@ -88,7 +89,8 @@ class TweetService {
 		});
 
 		if (!user) throw new Error('User not found');
-
+		console.log(user.following)
+		// get ids of users followed by concerned user
 		const followingUserIds = user.following.map((followedUser) => followedUser.followedId);
 
 		const rawTweets = await prisma.tweet.findMany({
