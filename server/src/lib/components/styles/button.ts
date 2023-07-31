@@ -43,10 +43,19 @@ export const button = cva({
 			auto: {
 				w: 'auto'
 			}
+		},
+		color: {
+			primary: {
+				bg: 'primary'
+			},
+			danger: {
+				bg: 'red'
+			}
 		}
 	},
 	defaultVariants: {
 		size: 'sm',
-		width: 'full'
+		width: 'full',
+		color: 'primary'
 	}
 });

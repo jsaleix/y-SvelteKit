@@ -1,12 +1,47 @@
 <script lang="ts">
 	import { button } from '$lib/components/styles/button';
 	import TweetListItem from '$lib/components/tweet/TweetListItem.svelte';
+	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
 	import type { PageServerData } from './$types';
 
 	export let data: PageServerData;
-	const { user, tweets } = data;
+	const { user, tweets, follows, interaction } = data;
+
+	const followUser = async () => {
+		try {
+			if (!user) throw new Error('User not found');
+			if (!$authUser) throw new Error('You must be logged in to follow a user');
+			const res = await fetch(`/api/follow/${user.id}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			const data = await res.json();
+			console.log(data);
+			interaction.areYouFollowing = true;
+		} catch (e: any) {
+			console.log(e);
+		}
+	};
+
+	const unfollowUser = async () => {
+		try {
+			if (!user) throw new Error('User not found');
+			if (!$authUser) throw new Error('You must be logged in to follow a user');
+			const res = await fetch(`/api/follow/${user.id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			interaction.areYouFollowing = false;
+		} catch (e: any) {
+			console.log(e);
+		}
+	};
 </script>
 
 {#if data.error || !user || !tweets}
@@ -75,14 +110,31 @@
 						bg: 'transparent'
 					})}
 				>
-					<button class={button({ width: 'auto' })}>Follow</button>
+					{#if interaction.areYouFollowing}
+						<button class={button({ width: 'auto', color: 'danger' })} on:click={unfollowUser}
+							>Unfollow</button
+						>
+					{:else}
+						<button class={button({ width: 'auto' })} on:click={followUser}>Follow</button>
+					{/if}
 				</div>
 			</div>
 			<div class={vstack({ gap: 1, px: 4 })}>
-				<div class={vstack({ gap: 0 })}>
+				<div class={vstack({ gap: 0, alignItems: 'flex-start' })}>
 					<h2 class={css({ fontWeight: 'bold', fontSize: '2xl' })}>{user.displayName}</h2>
 					<p class={css({ color: 'gray' })}>@{user.username}</p>
+					{#if interaction.isFollowingYou}
+						<p class={css({ fontSize: 'sm', color: 'white' })}>Is following you</p>
+					{/if}
 				</div>
+			</div>
+			<div class={hstack({ px: 4, gap: 4 })}>
+				<p class={hstack({ gap: 1, color: 'gray' })}>
+					<span class={css({ fontWeight: 'bold' })}>{follows.followersNb}</span> followers
+				</p>
+				<p class={hstack({ gap: 1, color: 'gray' })}>
+					<span class={css({ fontWeight: 'bold' })}>{follows.followingNb}</span> followings
+				</p>
 			</div>
 		</div>
 		<div class={divider()} />
