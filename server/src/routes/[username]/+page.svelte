@@ -44,6 +44,11 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{user?.displayName} (@{user?.username}) / Y</title>
+	<meta name="description" content="Saved tweets" />
+</svelte:head>
+
 {#if data.error || !user || !tweets}
 	<div>{data.error}</div>
 {:else}

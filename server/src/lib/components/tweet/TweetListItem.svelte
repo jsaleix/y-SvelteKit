@@ -105,12 +105,12 @@
 		<p class={css({ bg: 'none' })}>{tweet.content}</p>
 		<div class={hstack({ gap: 10, bg: 'none', w: 'full' })}>
 			<ReplyIcon handleClick={() => null} />
-			<div class={hstack({ gap: 1, bg: 'none', alignContent: 'center' })}>
+			<div class={hstack({ gap: 1, bg: 'none', alignItems: 'center' })}>
 				<p class={css({ bg: 'none' })}>{tweet.stats.retweets}</p>
 				<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
 			</div>
-			<div class={hstack({ gap: 1, bg: 'none', alignContent: 'center' })}>
-				<p class={css({ bg: 'none' })}>{tweet.stats.likes}</p>
+			<div class={hstack({ gap: 1, bg: 'none', alignItems: 'center' })}>
+				<p class={hstack({ bg: 'none' })}>{tweet.stats.likes}</p>
 				<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
 			</div>
 		</div>

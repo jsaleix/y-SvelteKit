@@ -2,7 +2,6 @@
 	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
-	import { onMount } from 'svelte';
 	import type { Tweet } from '../../../interfaces/tweet';
 	import BookmarkIcon from './icons/BookmarkIcon.svelte';
 	import LikeIcon from './icons/LikeIcon.svelte';
@@ -10,26 +9,13 @@
 	import RetweetIcon from './icons/RetweetIcon.svelte';
 
 	export let tweet: Tweet;
+	export let interactions = {
+		isLiked: false,
+		isBookmarked: false,
+		isRetweeted: false
+	};
 
-	let isLiked = false;
-	let isRetweeted = false;
-	let isBookmarked = false;
-
-	onMount(async () => {
-		if (!$authUser) return;
-		try {
-			const res = await fetch(`/api/tweets/${tweet.id}/like`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			const data = await res.json();
-			isLiked = data.isLiked;
-		} catch (e: any) {
-			console.log(e.message);
-		}
-	});
+	let { isLiked, isBookmarked, isRetweeted } = interactions;
 
 	const handleLike = async (e: MouseEvent) => {
 		e.stopPropagation();
@@ -43,8 +29,7 @@
 				method,
 				headers: {
 					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ userId: $authUser.id })
+				}
 			});
 			isLiked = !isLiked;
 			tweet.stats.likes += isLiked ? 1 : -1;
@@ -57,6 +42,31 @@
 		e.stopPropagation();
 		e.preventDefault();
 		console.log('retweet');
+	};
+
+	const handleBookmark = async (e: MouseEvent) => {
+		e.stopPropagation();
+		e.preventDefault();
+		try {
+			if (!$authUser) throw new Error('You must login first');
+			const method = isBookmarked ? 'DELETE' : 'POST';
+
+			const res = await fetch(`/api/tweets/${tweet.id}/bookmark`, {
+				method,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (res.status == 201) {
+				tweet.stats.bookmarks += 1;
+				isBookmarked = true;
+			} else {
+				isBookmarked = false;
+			}
+		} catch (e: any) {
+			console.log(e.message);
+		}
 	};
 </script>
 
@@ -115,7 +125,7 @@
 		<ReplyIcon handleClick={() => null} />
 		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
 		<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
-		<BookmarkIcon handleClick={() => null} alreadyAdded={isBookmarked} />
+		<BookmarkIcon handleClick={handleBookmark} alreadyAdded={isBookmarked} />
 	</div>
 	<div class={divider()} />
 </div>

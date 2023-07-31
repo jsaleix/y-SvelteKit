@@ -3,13 +3,13 @@
 
 	export let data;
 
-	const { tweet } = data;
+	const { tweet, interactions } = data;
 </script>
 
 {#if !tweet}
 	<div>{data.error}</div>
 {:else}
 	<div>
-		<TweetItem {tweet} />
+		<TweetItem {tweet} {interactions} />
 	</div>
 {/if}
