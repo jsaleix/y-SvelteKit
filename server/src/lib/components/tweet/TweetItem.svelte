@@ -4,6 +4,7 @@
 	import { divider, hstack, vstack } from 'styled-system/patterns';
 	import { onMount } from 'svelte';
 	import type { Tweet } from '../../../interfaces/tweet';
+	import BookmarkIcon from './icons/BookmarkIcon.svelte';
 	import LikeIcon from './icons/LikeIcon.svelte';
 	import ReplyIcon from './icons/ReplyIcon.svelte';
 	import RetweetIcon from './icons/RetweetIcon.svelte';
@@ -12,6 +13,7 @@
 
 	let isLiked = false;
 	let isRetweeted = false;
+	let isBookmarked = false;
 
 	onMount(async () => {
 		if (!$authUser) return;
@@ -113,6 +115,7 @@
 		<ReplyIcon handleClick={() => null} />
 		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
 		<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
+		<BookmarkIcon handleClick={() => null} alreadyAdded={isBookmarked} />
 	</div>
 	<div class={divider()} />
 </div>
