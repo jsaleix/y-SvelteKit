@@ -4,9 +4,9 @@
 	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { hstack, vstack } from 'styled-system/patterns';
-	import NewTweetModal from './NewTweetModal.svelte';
+	import NewTweetModal from '../NewTweetModal.svelte';
+	import { button } from '../styles/button';
 	import UserTab from './UserTab.svelte';
-	import { button } from './styles/button';
 
 	const isLogged: boolean = !!$authUser;
 	let openModal: boolean = false;

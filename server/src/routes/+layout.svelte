@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Navbar from '$lib/components/Navbar.svelte';
-	import RightCol from '$lib/components/RightCol.svelte';
+	import Navbar from '$lib/components/layout/Navbar.svelte';
+	import RightCol from '$lib/components/layout/RightCol.svelte';
 	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { container } from 'styled-system/patterns';
