@@ -2,11 +2,22 @@ import prisma from '$lib/assets/images/prisma';
 import type { CreateTweet, Tweet } from '../../../interfaces/tweet';
 
 class TweetService {
-	async createTweet({ content, creatorId }: CreateTweet) {
+	async createTweet({ content, creatorId, replyTo }: CreateTweet) {
+		if (replyTo) {
+			const tweetRepliedTo = await prisma.tweet.findUnique({
+				where: {
+					id: replyTo
+				}
+			});
+
+			if (!tweetRepliedTo) replyTo = null;
+		}
+
 		const newTweet = await prisma.tweet.create({
 			data: {
 				creatorId,
-				content
+				content,
+				replyTo
 			}
 		});
 
@@ -89,7 +100,7 @@ class TweetService {
 		});
 
 		if (!user) throw new Error('User not found');
-		console.log(user.following)
+		console.log(user.following);
 		// get ids of users followed by concerned user
 		const followingUserIds = user.following.map((followedUser) => followedUser.followedId);
 

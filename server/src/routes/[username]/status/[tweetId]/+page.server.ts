@@ -6,6 +6,12 @@ import userService from '$lib/server/services/user.service.js';
 export async function load({ params, locals }) {
 	try {
 		const { username, tweetId } = params;
+		const interactions = {
+			isLiked: false,
+			isBookmarked: false,
+			isRetweeted: false
+		};
+		let tweetRepliedTo = null;
 
 		const user = await userService.getUserPer('username', username as string);
 		if (!user) throw new Error('User not found');
@@ -13,18 +19,16 @@ export async function load({ params, locals }) {
 		const tweet = await tweetService.getTweet(tweetId as string);
 		if (!tweet) throw new Error('Tweet not found');
 
-		const interactions = {
-			isLiked: false,
-			isBookmarked: false,
-			isRetweeted: false
+		if (tweet.replyTo) {
+			tweetRepliedTo = await tweetService.getTweet(tweet.replyTo);
 		}
 
-		if(locals.user){
+		if (locals.user) {
 			interactions.isBookmarked = await bookmarkService.isBookmarked(locals.user.id, tweet.id);
 			interactions.isLiked = await likeService.hasUserLikedTweet(tweet.id, locals.user.id);
 		}
-		
-		return { user, tweet, interactions };
+
+		return { user, tweet, interactions, tweetRepliedTo };
 	} catch (e: any) {
 		console.log(e.message);
 		return { error: e.message };

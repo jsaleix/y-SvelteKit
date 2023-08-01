@@ -20,4 +20,5 @@ export interface Tweet {
 export interface CreateTweet {
 	content: string;
 	creatorId: string;
+	replyTo?: string | null;
 }
