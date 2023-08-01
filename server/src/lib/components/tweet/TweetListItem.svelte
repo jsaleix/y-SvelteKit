@@ -67,6 +67,7 @@
 	data-sveltekit-reload
 	href={`/${tweet.user.username}/status/${tweet.id}`}
 	class={vstack({
+		gap: 0,
 		p: 5,
 		w: 'full',
 		cursor: 'pointer',

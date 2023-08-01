@@ -1,54 +1,23 @@
 <script lang="ts">
 	import logo from '$lib/assets/icons/logo.svg';
-	import * as Icons from '$lib/assets/icons/nav/index';
 	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
-	import { hstack, vstack } from 'styled-system/patterns';
+	import { vstack } from 'styled-system/patterns';
 	import NewTweetModal from '../NewTweetModal.svelte';
-	import { button } from '../styles/button';
+	import NavBarLink from './NavBarLink.svelte';
+	import TweetBtn from './TweetBtn.svelte';
 	import UserTab from './UserTab.svelte';
+	import Bookmarks from './icons/Bookmarks.svelte';
+	import House from './icons/House.svelte';
+	import Messages from './icons/Messages.svelte';
+	import Profile from './icons/Profile.svelte';
 
 	const isLogged: boolean = !!$authUser;
 	let openModal: boolean = false;
 
 	const username = $authUser?.username || '';
 
-	const TABS = [
-		{
-			label: 'Home',
-			icon: Icons.house,
-			url: '/',
-			needsAuth: false
-		},
-		{
-			label: 'Explore',
-			icon: Icons.explore,
-			url: '/explore',
-			needsAuth: true
-		},
-		{
-			label: 'Messages',
-			icon: Icons.message,
-			url: '/messages',
-			needsAuth: true
-		},
-		{
-			label: 'Bookmarks',
-			icon: Icons.bookmark,
-			url: '/bookmarks',
-			needsAuth: true
-		},
-		{
-			label: 'Profile',
-			icon: Icons.profile,
-			url: '/' + username,
-			needsAuth: true
-		}
-	];
-</script>
-
-<header
-	class={vstack({
+	const headerStyle = vstack({
 		display: {
 			base: 'none',
 			md: 'flex'
@@ -58,20 +27,21 @@
 		w: '15%',
 		borderRight: '1px solid gray',
 		pr: 5
-	})}
->
-	<a
-		href="/"
-		class={css({
-			h: '25px',
-			w: '25px',
-			objectFit: 'contain',
-			overflow: 'hidden',
-			_hover: {
-				opacity: '0.7'
-			}
-		})}
-	>
+	});
+
+	const logoStyle = css({
+		h: '25px',
+		w: '25px',
+		objectFit: 'contain',
+		overflow: 'hidden',
+		_hover: {
+			opacity: '0.7'
+		}
+	});
+</script>
+
+<header class={headerStyle}>
+	<a href="/" class={logoStyle}>
 		<picture>
 			<img
 				src={logo}
@@ -81,19 +51,23 @@
 		</picture>
 	</a>
 	<ul class={vstack({ gap: 5, alignItems: 'start' })}>
-		{#each TABS as tab}
-			{#if (tab.needsAuth && isLogged) || !tab.needsAuth}
-				<li class={css({ bg: 'red' })}>
-					<a href={tab.url} class={hstack({ gap: '4', fontSize: 'xl' })}>
-						<img src={tab.icon} alt={`${tab.label} icon`} />
-						{tab.label}
-					</a>
-				</li>
-			{/if}
-		{/each}
+		<NavBarLink label="Home" url="/">
+			<House />
+		</NavBarLink>
+		{#if isLogged}
+			<NavBarLink label="Messages" url="/messages">
+				<Messages />
+			</NavBarLink>
+			<NavBarLink label="Bookmarks" url="/bookmarks">
+				<Bookmarks />
+			</NavBarLink>
+			<NavBarLink label="Profile" url={'/' + username}>
+				<Profile />
+			</NavBarLink>
+		{/if}
 	</ul>
 	{#if isLogged}
-		<button class={button({ size: 'lg' })} on:click={() => (openModal = true)}>Tweet</button>
+		<TweetBtn openModal={() => (openModal = true)} />
 		<div class={css({ marginTop: 'auto', marginBottom: '3', w: 'full' })}>
 			<UserTab user={$authUser} />
 		</div>
