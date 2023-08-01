@@ -25,7 +25,7 @@
 		css({
 			bg: 'none',
 			borderBottom: '1px solid primary',
-			color: 'white',
+			color: selected ? 'white' : 'gray',
 			fontWeight: selected ? 'bold' : 'regular'
 		});
 </script>

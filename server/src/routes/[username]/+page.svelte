@@ -16,8 +16,14 @@
 
 	const fetchTweetsWithReplies = async () => {
 		try {
+			loading = true;
+			const res = await fetch(`/api/users/${user?.username}/tweets?scope=with_replies`);
+			const data = await res.json();
+			tweetsWithReplies = data.tweets;
 		} catch (e: any) {
 			console.error(e.message);
+		} finally {
+			loading = false;
 		}
 	};
 
