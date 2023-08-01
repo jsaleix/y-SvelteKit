@@ -18,7 +18,7 @@
 
 	let { isLiked, isBookmarked, isRetweeted } = interactions;
 
-	let isOwner: boolean = $authUser ? $authUser.id === tweet.id : false;
+	let isOwner: boolean = $authUser ? $authUser.id === tweet.creatorId : false;
 
 	const handleLike = async (e: MouseEvent) => {
 		e.stopPropagation();
@@ -146,9 +146,11 @@
 		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
 		<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
 		<BookmarkIcon handleClick={handleBookmark} alreadyAdded={isBookmarked} />
-		<span class={css({ ml: 'auto' })}>
-			<TrashIcon handleClick={handleDelete} />
-		</span>
+		{#if isOwner}
+			<span class={css({ ml: 'auto' })}>
+				<TrashIcon handleClick={handleDelete} />
+			</span>
+		{/if}
 	</div>
 	<div class={divider()} />
 </div>
