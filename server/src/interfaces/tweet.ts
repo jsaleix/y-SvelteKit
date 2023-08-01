@@ -14,6 +14,7 @@ export interface Tweet {
 		retweets: number;
 		likes: number;
 		bookmarks: number;
+		replies: number;
 	};
 }
 

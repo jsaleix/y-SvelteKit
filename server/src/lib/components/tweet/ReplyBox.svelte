@@ -22,8 +22,8 @@
 			outline: 'none',
 			color: 'white',
 			fontSize: 'xl',
-			h: { base: '25vh', md: '30%' },
 			p: 1,
+			h: 'auto',
 			resize: 'none'
 		})}
 		maxlength={TWEET_MAX_LENGTH}

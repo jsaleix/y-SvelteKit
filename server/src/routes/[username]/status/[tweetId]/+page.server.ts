@@ -12,6 +12,7 @@ export async function load({ params, locals }) {
 			isRetweeted: false
 		};
 		let tweetRepliedTo = null;
+		let replies = [];
 
 		const user = await userService.getUserPer('username', username as string);
 		if (!user) throw new Error('User not found');
@@ -23,12 +24,14 @@ export async function load({ params, locals }) {
 			tweetRepliedTo = await tweetService.getTweet(tweet.replyTo);
 		}
 
+		replies = await tweetService.getReplies(tweet.id);
+
 		if (locals.user) {
 			interactions.isBookmarked = await bookmarkService.isBookmarked(locals.user.id, tweet.id);
 			interactions.isLiked = await likeService.hasUserLikedTweet(tweet.id, locals.user.id);
 		}
 
-		return { user, tweet, interactions, tweetRepliedTo };
+		return { user, tweet, interactions, tweetRepliedTo, replies };
 	} catch (e: any) {
 		console.log(e.message);
 		return { error: e.message };

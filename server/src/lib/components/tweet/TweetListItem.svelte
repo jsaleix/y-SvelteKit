@@ -104,7 +104,10 @@
 		</div>
 		<p class={css({ bg: 'none' })}>{tweet.content}</p>
 		<div class={hstack({ gap: 10, bg: 'none', w: 'full' })}>
-			<ReplyIcon handleClick={() => null} />
+			<div class={hstack({ gap: 1, bg: 'none', alignItems: 'center' })}>
+				<p class={css({ bg: 'none' })}>{tweet.stats.replies}</p>
+				<ReplyIcon handleClick={() => null} />
+			</div>
 			<div class={hstack({ gap: 1, bg: 'none', alignItems: 'center' })}>
 				<p class={css({ bg: 'none' })}>{tweet.stats.retweets}</p>
 				<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />

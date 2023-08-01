@@ -45,6 +45,12 @@ class TweetService {
 			}
 		});
 
+		const replies = await prisma.tweet.count({
+			where: {
+				replyTo: tweetId
+			}
+		});
+
 		const owner = await prisma.user.findUnique({
 			where: {
 				id: tweet.creatorId
@@ -65,7 +71,8 @@ class TweetService {
 			stats: {
 				retweets: 0,
 				likes,
-				bookmarks
+				bookmarks,
+				replies
 			}
 		};
 	}
@@ -121,6 +128,26 @@ class TweetService {
 		);
 
 		return tweets;
+	}
+
+	async getReplies(tweetId: string): Promise<Tweet[]> {
+		const rawReplies = await prisma.tweet.findMany({
+			where: {
+				replyTo: tweetId
+			},
+			orderBy: {
+				createdAt: 'desc'
+			}
+		});
+
+		const replies = await Promise.all(
+			rawReplies.map(async (rawReply) => {
+				const reply = await this.getTweet(rawReply.id);
+				return reply;
+			})
+		);
+
+		return replies;
 	}
 }
 

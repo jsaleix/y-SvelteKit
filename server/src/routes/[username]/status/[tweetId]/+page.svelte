@@ -7,9 +7,7 @@
 	import { divider } from 'styled-system/patterns';
 
 	export let data;
-	const { tweet, interactions, tweetRepliedTo } = data;
-
-	let replies = [];
+	const { tweet, interactions, tweetRepliedTo, replies } = data;
 
 	const handleReply = async (reply: string) => {
 		try {
@@ -26,6 +24,7 @@
 			});
 			if (!res.ok) throw new Error('Something went wrong');
 			const data = await res.json();
+			window.location.href = `/${$authUser.username}/status/${data.tweetId}`;
 		} catch (e: any) {
 			console.error(e.message);
 		}
@@ -44,6 +43,11 @@
 		{#if $authUser}
 			<ReplyBox {handleReply} />
 			<div class={divider()} />
+			{#if replies.length > 0}
+				{#each replies as reply}
+					<TweetListItem tweet={reply} />
+				{/each}
+			{/if}
 		{/if}
 	</div>
 {/if}
