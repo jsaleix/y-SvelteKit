@@ -24,6 +24,22 @@ class TweetService {
 		return newTweet;
 	}
 
+	async deleteTweet(tweetId: string) {
+		const tweet = await prisma.tweet.findUnique({
+			where: {
+				id: tweetId
+			}
+		});
+
+		if (!tweet) throw new Error('Tweet not found');
+
+		await prisma.tweet.delete({
+			where: {
+				id: tweetId
+			}
+		});
+	}
+
 	async getTweet(tweetId: string): Promise<Tweet> {
 		const tweet = await prisma.tweet.findUnique({
 			where: {
@@ -77,11 +93,39 @@ class TweetService {
 		};
 	}
 
-	async getTweets(userId: string): Promise<Tweet[]> {
+	async getTweets(userId: string, skip: number = 0, take: number = 10): Promise<Tweet[]> {
 		const rawTweets = await prisma.tweet.findMany({
 			where: {
 				creatorId: userId
 			},
+			skip,
+			take,
+			orderBy: {
+				createdAt: 'desc'
+			}
+		});
+
+		const tweets = await Promise.all(
+			rawTweets.map(async (rawTweet) => {
+				const tweet = await this.getTweet(rawTweet.id);
+				return tweet;
+			})
+		);
+
+		return tweets;
+	}
+	async getTweetsWithoutReplies(
+		userId: string,
+		skip: number = 0,
+		take: number = 10
+	): Promise<Tweet[]> {
+		const rawTweets = await prisma.tweet.findMany({
+			where: {
+				creatorId: userId,
+				replyTo: null
+			},
+			skip,
+			take,
 			orderBy: {
 				createdAt: 'desc'
 			}
@@ -97,7 +141,11 @@ class TweetService {
 		return tweets;
 	}
 
-	async getTweetsOfFollowedUsers(userId: string): Promise<Tweet[]> {
+	async getTweetsOfFollowedUsers(
+		userId: string,
+		skip: number = 0,
+		take: number = 10
+	): Promise<Tweet[]> {
 		//get concerned user
 		const user = await prisma.user.findUnique({
 			where: { id: userId },
@@ -115,6 +163,8 @@ class TweetService {
 			where: {
 				OR: [{ creatorId: user.id }, { creatorId: { in: followingUserIds } }]
 			},
+			skip,
+			take,
 			orderBy: {
 				createdAt: 'desc'
 			}
