@@ -1,5 +1,8 @@
 import prisma from '$lib/assets/images/prisma';
+import { NOTIFICATION_TYPES } from '$lib/constants/notification';
+import type { NotificationType } from '@prisma/client';
 import type { CreateTweet, Tweet } from '../../../interfaces/tweet';
+import notificationService from './notification.service';
 
 class TweetService {
 	async createTweet({ content, creatorId, replyTo }: CreateTweet) {
@@ -20,6 +23,14 @@ class TweetService {
 				replyTo
 			}
 		});
+
+		if (newTweet.replyTo) {
+			await notificationService.createNotification(
+				creatorId,
+				NOTIFICATION_TYPES.REPLY as NotificationType,
+				newTweet.id
+			);
+		}
 
 		return newTweet;
 	}

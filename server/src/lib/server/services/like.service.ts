@@ -1,4 +1,7 @@
 import prisma from '$lib/assets/images/prisma';
+import { NOTIFICATION_TYPES } from '$lib/constants/notification';
+import type { NotificationType } from '@prisma/client';
+import notificationService from './notification.service';
 
 class LikeService {
 	async likeTweet(tweetId: string, userId: string) {
@@ -25,6 +28,12 @@ class LikeService {
 				}
 			});
 		}
+
+		await notificationService.createNotification(
+			userId,
+			NOTIFICATION_TYPES.LIKE as NotificationType,
+			tweetId
+		);
 
 		return like;
 	}

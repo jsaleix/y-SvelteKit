@@ -1,4 +1,7 @@
 import prisma from '$lib/assets/images/prisma';
+import { NOTIFICATION_TYPES } from '$lib/constants/notification';
+import type { NotificationType } from '@prisma/client';
+import notificationService from './notification.service';
 
 class FollowService {
 	async followUser(userId: string, toFollow: string) {
@@ -34,6 +37,11 @@ class FollowService {
 			});
 		}
 
+		await notificationService.createNotification(
+			userId,
+			NOTIFICATION_TYPES.FOLLOW as NotificationType,
+			toFollow
+		);
 		return follow;
 	}
 
