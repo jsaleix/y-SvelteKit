@@ -12,7 +12,8 @@
 		transition: '0.2s',
 		_hover: {
 			color: 'primary'
-		}
+		},
+		position: 'relative'
 	});
 
 	const labelStyle = css({
@@ -27,7 +28,7 @@
 	});
 </script>
 
-<li class={css({ bg: 'red' })}>
+<li class={css({ bg: 'red', position: 'relative' })}>
 	<a href={url} class={aStyle}>
 		<slot />
 		<span class={labelStyle}>{label}</span>

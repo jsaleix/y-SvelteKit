@@ -10,9 +10,11 @@
 	import Bookmarks from './icons/Bookmarks.svelte';
 	import House from './icons/House.svelte';
 	import Messages from './icons/Messages.svelte';
+	import Notifications from './icons/Notifications.svelte';
 	import Profile from './icons/Profile.svelte';
 
 	const isLogged: boolean = !!$authUser;
+	export let notificationNb: number | null = null;
 	let openModal: boolean = false;
 
 	const username = $authUser?.username || '';
@@ -60,6 +62,9 @@
 		{#if isLogged}
 			<NavBarLink label="Messages" url="/messages">
 				<Messages />
+			</NavBarLink>
+			<NavBarLink label={'Notifications'} url="/notifications">
+				<Notifications {notificationNb} />
 			</NavBarLink>
 			<NavBarLink label="Bookmarks" url="/bookmarks">
 				<Bookmarks />

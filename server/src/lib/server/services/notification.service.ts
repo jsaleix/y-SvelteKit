@@ -1,6 +1,8 @@
 import prisma from '$lib/assets/images/prisma';
 import { NOTIFICATION_TYPES } from '$lib/constants/notification';
 import type { NotificationType } from '@prisma/client';
+import tweetService from './tweet.service';
+import userService from './user.service';
 
 class NotificationService {
 	async createNotification(userId: string, notificationType: NotificationType, entityId?: string) {
@@ -59,12 +61,60 @@ class NotificationService {
 		}
 	}
 
-	async getNotifications(userId: string) {}
+	async getNotifications(userId: string) {
+		const rawNotifications = await prisma.notification.findMany({
+			where: {
+				userId
+			},
+			orderBy: {
+				createdAt: 'desc'
+			}
+		});
+
+		await prisma.notification.updateMany({
+			where: {
+				userId
+			},
+			data: {
+				read: true
+			}
+		});
+
+		const notifications = await Promise.all(
+			rawNotifications.map(async (notification) => {
+				let tweet = null;
+				let account = null;
+
+				if (notification.tweetId) {
+					tweet = await tweetService.getTweet(notification.tweetId);
+				}
+
+				if (notification.accountId) {
+					account = await userService.getUserPer('id', notification.accountId);
+				}
+
+				return {
+					...notification,
+					tweet,
+					account
+				};
+			})
+		);
+
+		return notifications;
+	}
 
 	async readNotifications(userId: string) {}
 
-	async getUnreadNotifications(userId: string): Promise<number> {
-		return 0;
+	async getUnreadNotificationsNb(userId: string): Promise<number> {
+		const count = await prisma.notification.count({
+			where: {
+				userId,
+				read: false
+			}
+		});
+
+		return count;
 	}
 }
 

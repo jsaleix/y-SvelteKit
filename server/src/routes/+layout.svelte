@@ -21,7 +21,7 @@
 		paddingY: '10px'
 	})}
 >
-	<Navbar />
+	<Navbar notificationNb={data.notificationNb} />
 	<main class={css({ w: { sm: '100%', md: '55%' }, overflowY: 'scroll' })}>
 		<slot />
 	</main>
