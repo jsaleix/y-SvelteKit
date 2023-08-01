@@ -20,7 +20,7 @@ export async function load({ params, locals }: { params: any; locals: any }) {
 			areYouFollowing = await followService.isUserFollowing(locals.user.id, user.id);
 		}
 
-		const tweets = await tweetService.getTweets(user.id);
+		const tweets = await tweetService.getTweetsWithoutReplies(user.id);
 		return {
 			user,
 			tweets,
