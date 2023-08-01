@@ -9,6 +9,7 @@
 		gap: '4',
 		fontSize: 'xl',
 		color: 'white',
+		transition: '0.2s',
 		_hover: {
 			color: 'primary'
 		}
@@ -18,6 +19,10 @@
 		display: {
 			base: 'none',
 			lg: 'block'
+		},
+		transition: '0.2s',
+		_hover: {
+			color: 'primary'
 		}
 	});
 </script>

@@ -1,9 +1,5 @@
 <script>
 	import { css } from 'styled-system/css';
-
-	export let handleClick = () => {
-		console.log('clicked');
-	};
 </script>
 
 <svg

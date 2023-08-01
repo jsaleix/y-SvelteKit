@@ -33,6 +33,22 @@ class TweetService {
 
 		if (!tweet) throw new Error('Tweet not found');
 
+		await prisma.bookmark.deleteMany({
+			where: {
+				tweetId
+			}
+		});
+
+		// //TMP FIND A NEW WAY TO KEEP TWEET AS REPLY
+		// await prisma.tweet.updateMany({
+		// 	where: {
+		// 		replyTo: tweetId
+		// 	},
+		// 	data: {
+		// 		replyTo: null
+		// 	}
+		// });
+
 		await prisma.tweet.delete({
 			where: {
 				id: tweetId
@@ -155,7 +171,6 @@ class TweetService {
 		});
 
 		if (!user) throw new Error('User not found');
-		console.log(user.following);
 		// get ids of users followed by concerned user
 		const followingUserIds = user.following.map((followedUser) => followedUser.followedId);
 

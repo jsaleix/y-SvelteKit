@@ -3,6 +3,7 @@
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
 	import type { Tweet } from '../../../interfaces/tweet';
+	import TrashIcon from '../icons/TrashIcon.svelte';
 	import BookmarkIcon from './icons/BookmarkIcon.svelte';
 	import LikeIcon from './icons/LikeIcon.svelte';
 	import ReplyIcon from './icons/ReplyIcon.svelte';
@@ -16,6 +17,8 @@
 	};
 
 	let { isLiked, isBookmarked, isRetweeted } = interactions;
+
+	let isOwner: boolean = $authUser ? $authUser.id === tweet.id : false;
 
 	const handleLike = async (e: MouseEvent) => {
 		e.stopPropagation();
@@ -33,6 +36,24 @@
 			});
 			isLiked = !isLiked;
 			tweet.stats.likes += isLiked ? 1 : -1;
+		} catch (e: any) {
+			console.log(e.message);
+		}
+	};
+
+	const handleDelete = async () => {
+		try {
+			const res = await fetch(`/api/tweets/${tweet.id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			if (res.status == 204) {
+				window.location.href = '/';
+			} else {
+				throw new Error('Something went wrong');
+			}
 		} catch (e: any) {
 			console.log(e.message);
 		}
@@ -121,10 +142,13 @@
 	</div>
 	<div class={divider()} />
 	<div class={hstack({ gap: 10, bg: 'none', w: 'full' })}>
-		<ReplyIcon handleClick={() => null} />
+		<ReplyIcon />
 		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
 		<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
 		<BookmarkIcon handleClick={handleBookmark} alreadyAdded={isBookmarked} />
+		<span class={css({ ml: 'auto' })}>
+			<TrashIcon handleClick={handleDelete} />
+		</span>
 	</div>
 	<div class={divider()} />
 </div>
