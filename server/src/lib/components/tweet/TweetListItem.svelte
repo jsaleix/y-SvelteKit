@@ -64,6 +64,7 @@
 </script>
 
 <a
+	data-sveltekit-reload
 	href={`/${tweet.user.username}/status/${tweet.id}`}
 	class={hstack({
 		p: 5,
