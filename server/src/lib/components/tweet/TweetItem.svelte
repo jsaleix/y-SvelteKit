@@ -72,7 +72,6 @@
 
 <div
 	class={vstack({
-		p: 5,
 		gap: 5,
 		w: 'full',
 		transition: '0.5s',

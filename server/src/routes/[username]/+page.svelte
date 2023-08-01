@@ -4,6 +4,7 @@
 	import { authUser } from '$lib/stores/auth';
 	import { css } from 'styled-system/css';
 	import { divider, hstack, vstack } from 'styled-system/patterns';
+	import { fly } from 'svelte/transition';
 	import type { PageServerData } from './$types';
 
 	export let data: PageServerData;
@@ -52,7 +53,10 @@
 {#if data.error || !user || !tweets}
 	<div>{data.error}</div>
 {:else}
-	<div class={vstack({ gap: 0, w: 'full', alignItems: 'start' })}>
+	<div
+		class={vstack({ gap: 0, w: 'full', alignItems: 'start' })}
+		in:fly={{ y: 20, duration: 1000 }}
+	>
 		<div class={vstack({ alignItems: 'start', py: 3, w: 'full', h: 'fit-content' })}>
 			<div
 				id="profile_presentation"

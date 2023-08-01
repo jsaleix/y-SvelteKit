@@ -3,6 +3,7 @@ export interface Tweet {
 	content: string;
 	creatorId: string;
 	createdAt: Date;
+	replyTo?: string | null;
 	user: {
 		id: string;
 		username: string;
