@@ -23,7 +23,10 @@
 			md: 'flex'
 		},
 		gap: '5',
-		alignItems: 'start',
+		alignItems: {
+			base: 'center',
+			lg: 'start'
+		},
 		w: '15%',
 		borderRight: '1px solid gray',
 		pr: 5
