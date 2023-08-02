@@ -1,5 +1,5 @@
 import { getSession } from '$lib/server/session-store';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleServerError } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
 	const { cookies } = event;
@@ -24,3 +24,7 @@ export const handle = (async ({ event, resolve }) => {
 	const response = await resolve(event);
 	return response;
 }) satisfies Handle;
+
+export const handleErrors = (async ({ event, error }) => {
+	console.error(error);
+}) satisfies HandleServerError;

@@ -4,22 +4,25 @@ export interface Tweet {
 	creatorId: string;
 	createdAt: Date;
 	replyTo?: string | null;
+	retweetOf?: string | null;
 	user: {
 		id: string;
 		username: string;
 		displayName: string | null;
 		avatar: string;
 	};
-	stats: {
-		retweets: number;
-		likes: number;
-		bookmarks: number;
-		replies: number;
-	};
+	stats: TweetStatsI;
 }
 
 export interface CreateTweet {
 	content: string;
 	creatorId: string;
 	replyTo?: string | null;
+}
+
+export interface TweetStatsI {
+	retweets: number;
+	likes: number;
+	bookmarks: number;
+	replies: number;
 }

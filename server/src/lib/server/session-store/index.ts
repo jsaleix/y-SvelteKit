@@ -20,7 +20,6 @@ function getSid(): Sid {
 
 export function createSession(user: User, maxAge: number): string {
 	let sid: Sid = '';
-
 	do {
 		sid = getSid();
 	} while (sessionStore.has(sid));

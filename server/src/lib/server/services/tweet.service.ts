@@ -1,7 +1,7 @@
 import prisma from '$lib/assets/images/prisma';
 import { NOTIFICATION_TYPES } from '$lib/constants/notification';
 import type { NotificationType } from '@prisma/client';
-import type { CreateTweet, Tweet } from '../../../interfaces/tweet';
+import type { CreateTweet, Tweet, TweetStatsI } from '../../../interfaces/tweet';
 import notificationService from './notification.service';
 
 class TweetService {
@@ -67,15 +67,7 @@ class TweetService {
 		});
 	}
 
-	async getTweet(tweetId: string): Promise<Tweet> {
-		const tweet = await prisma.tweet.findUnique({
-			where: {
-				id: tweetId
-			}
-		});
-
-		if (!tweet) throw new Error('Tweet not found');
-
+	async getStats(tweetId: string): Promise<TweetStatsI> {
 		const likes = await prisma.like.count({
 			where: {
 				tweetId
@@ -94,6 +86,25 @@ class TweetService {
 			}
 		});
 
+		return {
+			retweets: 0,
+			likes,
+			bookmarks,
+			replies
+		};
+	}
+
+	async getTweet(tweetId: string): Promise<Tweet> {
+		const tweet = await prisma.tweet.findUnique({
+			where: {
+				id: tweetId
+			}
+		});
+
+		if (!tweet) throw new Error('Tweet not found');
+
+		const stats = await this.getStats(tweetId);
+
 		const owner = await prisma.user.findUnique({
 			where: {
 				id: tweet.creatorId
@@ -111,12 +122,7 @@ class TweetService {
 		return {
 			...tweet,
 			user: owner,
-			stats: {
-				retweets: 0,
-				likes,
-				bookmarks,
-				replies
-			}
+			stats
 		};
 	}
 
