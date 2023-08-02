@@ -1,6 +1,6 @@
 import notificationService from '$lib/server/services/notification.service';
 
-export async function load({ locals }: { params: any; locals: App.Locals }) {
+export async function load({ locals }) {
 	let notificationNb = null;
 
 	if (locals.user) {

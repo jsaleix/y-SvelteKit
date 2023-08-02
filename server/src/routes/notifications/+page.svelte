@@ -16,13 +16,7 @@
 			<div>No tweet saved yet</div>
 		{:else}
 			{#each notifications as notification}
-				<p>{notification.id}</p>
-				{#if notification.tweet}
-					<p>{notification.tweet.content}</p>
-				{/if}
-				{#if notification.account}
-					<p>{notification.account.username}</p>
-				{/if}
+				<p>{JSON.stringify(notification)}</p>
 			{/each}
 		{/if}
 	</div>

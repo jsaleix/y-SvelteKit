@@ -1,11 +1,12 @@
 import prisma from '$lib/assets/images/prisma';
+import type { UserProfileI } from '../../../interfaces/profile';
 
 class UserService {
-	async getUserPer(key: string, value: string) {
+	async getUserPer(key: string, value: string): Promise<UserProfileI> {
 		const keys = ['username', 'id', 'email'];
 		if (!key) throw new Error('No key provided');
 		if (!keys.includes(key)) throw new Error('Invalid key provided');
-		const user = await prisma.user.findUnique({
+		const user = (await prisma.user.findUnique({
 			where: {
 				[key]: value
 			},
@@ -15,7 +16,7 @@ class UserService {
 				avatar: true,
 				displayName: true
 			}
-		});
+		})) as UserProfileI;
 		return user;
 	}
 

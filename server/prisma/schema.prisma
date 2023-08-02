@@ -26,7 +26,8 @@ model User {
   bookmarks Bookmark[]
   followers Following[] @relation("Followers")
   following Following[] @relation("Following")
-  notifications Notification[]
+  notifications Notification[] @relation("ToNotify")
+  notificationsCreated Notification[] @relation("Author")
 }
 
 model Tweet {
@@ -45,6 +46,7 @@ model Tweet {
   replyTo String?
   reply Tweet? @relation("ReplyToTweet", fields: [replyTo], references: [id])
   replies Tweet[] @relation("ReplyToTweet")
+  notifications Notification[] @relation("Tweet")
 }
 
 model Like {
@@ -76,11 +78,13 @@ model Following {
 
 model Notification {
   id String @id @default(uuid())
-  userId String
-  user User @relation(fields: [userId], references: [id])
+  toNotifyId String
+  toNotify User @relation("ToNotify", fields: [toNotifyId], references: [id])
   type NotificationType
   tweetId String?
-  accountId String?
+  tweet Tweet? @relation("Tweet", fields: [tweetId], references: [id])
+  authorId String?
+  author User? @relation("Author", fields: [authorId], references: [id])
   read Boolean @default(false)
   createdAt DateTime @default(now())
 }

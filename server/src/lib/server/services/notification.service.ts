@@ -5,14 +5,18 @@ import tweetService from './tweet.service';
 import userService from './user.service';
 
 class NotificationService {
-	async createNotification(userId: string, notificationType: NotificationType, entityId?: string) {
-		const user = await prisma.user.findUnique({
+	async createNotification(
+		authorId: string,
+		notificationType: NotificationType,
+		entityId?: string
+	) {
+		const author = await prisma.user.findUnique({
 			where: {
-				id: userId
+				id: authorId
 			}
 		});
 
-		if (!user) throw new Error('User not found');
+		if (!author) throw new Error('User not found');
 
 		if (!Object.values(NOTIFICATION_TYPES).includes(notificationType))
 			throw new Error('Invalid type of notification');
@@ -39,7 +43,8 @@ class NotificationService {
 				data: {
 					type: notificationType,
 					tweetId: entityId,
-					userId: toNotify
+					toNotifyId: toNotify,
+					authorId: author.id
 				}
 			});
 
@@ -54,8 +59,8 @@ class NotificationService {
 			await prisma.notification.create({
 				data: {
 					type: notificationType,
-					accountId: userId,
-					userId: toNotify
+					toNotifyId: toNotify,
+					authorId: author.id
 				}
 			});
 		}
@@ -64,7 +69,7 @@ class NotificationService {
 	async getNotifications(userId: string) {
 		const rawNotifications = await prisma.notification.findMany({
 			where: {
-				userId
+				toNotifyId: userId
 			},
 			orderBy: {
 				createdAt: 'desc'
@@ -73,7 +78,7 @@ class NotificationService {
 
 		await prisma.notification.updateMany({
 			where: {
-				userId
+				toNotifyId: userId
 			},
 			data: {
 				read: true
@@ -89,8 +94,8 @@ class NotificationService {
 					tweet = await tweetService.getTweet(notification.tweetId);
 				}
 
-				if (notification.accountId) {
-					account = await userService.getUserPer('id', notification.accountId);
+				if (notification.authorId) {
+					account = await userService.getUserPer('id', notification.authorId);
 				}
 
 				return {
@@ -109,7 +114,7 @@ class NotificationService {
 	async getUnreadNotificationsNb(userId: string): Promise<number> {
 		const count = await prisma.notification.count({
 			where: {
-				userId,
+				toNotifyId: userId,
 				read: false
 			}
 		});
