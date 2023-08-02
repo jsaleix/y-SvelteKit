@@ -19,6 +19,7 @@ function getSid(): Sid {
 }
 
 export function createSession(user: User, maxAge: number): string {
+	console.log('createSession');
 	let sid: Sid = '';
 	do {
 		sid = getSid();
@@ -61,6 +62,7 @@ export function deleteSession(sid: Sid): void {
 let nextClean = Date.now() + 1000 * 60 * 60; // 1 hour
 
 function clean() {
+	console.log('called');
 	const now = Date.now();
 	for (const [sid, session] of sessionStore) {
 		if (session.invalidAt < now) {

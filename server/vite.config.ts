@@ -14,9 +14,6 @@ export default defineConfig({
 		}
 	},
 	preview: {
-		fs: {
-			allow: ['styled-system']
-		},
 		host: '0.0.0.0',
 		port: 8080
 	}

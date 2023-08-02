@@ -46,6 +46,15 @@ class TweetService {
 
 		if (!tweetRetweeted) throw new Error('Tweet not found');
 
+		const alreadyRetweeted = await prisma.tweet.findFirst({
+			where: {
+				creatorId,
+				retweetOf
+			}
+		});
+
+		if (alreadyRetweeted) throw new Error('Already retweeted');
+
 		const newTweet = await prisma.tweet.create({
 			data: {
 				creatorId,
@@ -61,6 +70,17 @@ class TweetService {
 		);
 
 		return newTweet;
+	}
+
+	async hasUserRetweeted(userId: string, tweetId: string) {
+		const retweet = await prisma.tweet.findFirst({
+			where: {
+				creatorId: userId,
+				retweetOf: tweetId
+			}
+		});
+
+		return !!retweet;
 	}
 
 	async deleteTweet(tweetId: string) {
@@ -175,6 +195,7 @@ class TweetService {
 
 		return tweets;
 	}
+
 	async getTweetsWithoutReplies(
 		userId: string,
 		skip: number = 0,

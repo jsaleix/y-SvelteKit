@@ -4,7 +4,8 @@ import type { Handle, HandleServerError } from '@sveltejs/kit';
 export const handle = (async ({ event, resolve }) => {
 	const { cookies } = event;
 	const sid = cookies.get('sid');
-	if (sid) {
+
+	if (!!sid) {
 		const session = getSession(sid);
 		if (session) {
 			event.locals.user = {
@@ -17,11 +18,14 @@ export const handle = (async ({ event, resolve }) => {
 			};
 		} else {
 			// remove invalid/expired/unknown cookie
+			console.log(Object.keys(cookies));
 			cookies.delete('sid');
 		}
 	}
 
+	console.log(cookies.getAll());
 	const response = await resolve(event);
+
 	return response;
 }) satisfies Handle;
 

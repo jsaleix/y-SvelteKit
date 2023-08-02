@@ -143,7 +143,7 @@
 	<div class={divider()} />
 	<div class={hstack({ gap: 10, bg: 'none', w: 'full' })}>
 		<ReplyIcon />
-		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={false} />
+		<RetweetIcon handleClick={handleRetweet} alreadyRetweeted={isRetweeted} />
 		<LikeIcon handleClick={handleLike} alreadyLiked={isLiked} />
 		<BookmarkIcon handleClick={handleBookmark} alreadyAdded={isBookmarked} />
 		{#if isOwner}

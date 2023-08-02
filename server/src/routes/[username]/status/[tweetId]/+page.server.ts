@@ -29,6 +29,7 @@ export async function load({ params, locals }) {
 		if (locals.user) {
 			interactions.isBookmarked = await bookmarkService.isBookmarked(locals.user.id, tweet.id);
 			interactions.isLiked = await likeService.hasUserLikedTweet(tweet.id, locals.user.id);
+			interactions.isRetweeted = await tweetService.hasUserRetweeted(locals.user.id, tweet.id);
 		}
 
 		return { user, tweet, interactions, tweetRepliedTo, replies };

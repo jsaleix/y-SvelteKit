@@ -11,6 +11,7 @@ const performLogin = (cookies: Cookies, user: User) => {
 };
 
 export const load = async ({ locals }) => {
+	console.log('load');
 	isNotConnected(locals, '/');
 };
 

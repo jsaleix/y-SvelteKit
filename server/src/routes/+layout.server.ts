@@ -1,8 +1,7 @@
 import notificationService from '$lib/server/services/notification.service';
 
-export async function load({ locals }) {
+export async function load({ locals }: { locals: App.Locals }) {
 	let notificationNb = null;
-
 	if (locals.user) {
 		notificationNb = await notificationService.getUnreadNotificationsNb(locals.user.id);
 	}
