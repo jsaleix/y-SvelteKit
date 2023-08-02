@@ -1,6 +1,7 @@
 import prisma from '$lib/assets/images/prisma';
 import { NOTIFICATION_TYPES } from '$lib/constants/notification';
 import type { NotificationType } from '@prisma/client';
+import type { NotificationI } from '../../../interfaces/notification';
 import tweetService from './tweet.service';
 import userService from './user.service';
 
@@ -66,13 +67,13 @@ class NotificationService {
 		}
 	}
 
-	async getNotifications(userId: string) {
+	async getNotifications(userId: string): Promise<NotificationI[]> {
 		const rawNotifications = await prisma.notification.findMany({
 			where: {
 				toNotifyId: userId
 			},
 			orderBy: {
-				createdAt: 'desc'
+				createdAt: 'asc'
 			}
 		});
 
@@ -88,20 +89,20 @@ class NotificationService {
 		const notifications = await Promise.all(
 			rawNotifications.map(async (notification) => {
 				let tweet = null;
-				let account = null;
+				let author = null;
 
 				if (notification.tweetId) {
 					tweet = await tweetService.getTweet(notification.tweetId);
 				}
 
 				if (notification.authorId) {
-					account = await userService.getUserPer('id', notification.authorId);
+					author = await userService.getUserPer('id', notification.authorId);
 				}
 
 				return {
 					...notification,
 					tweet,
-					account
+					author
 				};
 			})
 		);

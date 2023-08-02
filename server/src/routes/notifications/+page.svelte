@@ -1,4 +1,5 @@
 <script lang="ts">
+	import NotificationListItem from '$lib/components/notification/NotificationListItem.svelte';
 	import { css } from 'styled-system/css';
 	import { vstack } from 'styled-system/patterns';
 	import type { PageServerData } from './$types';
@@ -16,7 +17,7 @@
 			<div>No tweet saved yet</div>
 		{:else}
 			{#each notifications as notification}
-				<p>{JSON.stringify(notification)}</p>
+				<NotificationListItem {notification} />
 			{/each}
 		{/if}
 	</div>
