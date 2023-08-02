@@ -1,7 +1,7 @@
 import prisma from '$lib/assets/images/prisma';
 import { NOTIFICATION_TYPES } from '$lib/constants/notification';
 import type { NotificationType } from '@prisma/client';
-import type { CreateTweet, Tweet, TweetStatsI } from '../../../interfaces/tweet';
+import type { CreateTweet, Tweet, TweetStatsI, createRetweet } from '../../../interfaces/tweet';
 import notificationService from './notification.service';
 
 class TweetService {
@@ -31,6 +31,34 @@ class TweetService {
 				newTweet.id
 			);
 		}
+
+		return newTweet;
+	}
+
+	async createRetweet({ content, creatorId, retweetOf }: createRetweet) {
+		if (!retweetOf) throw new Error('Tweet not found');
+
+		const tweetRetweeted = await prisma.tweet.findUnique({
+			where: {
+				id: retweetOf
+			}
+		});
+
+		if (!tweetRetweeted) throw new Error('Tweet not found');
+
+		const newTweet = await prisma.tweet.create({
+			data: {
+				creatorId,
+				content,
+				retweetOf
+			}
+		});
+
+		await notificationService.createNotification(
+			creatorId,
+			NOTIFICATION_TYPES.RETWEET as NotificationType,
+			newTweet.id
+		);
 
 		return newTweet;
 	}

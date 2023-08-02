@@ -1,5 +1,5 @@
 import prisma from '$lib/assets/images/prisma';
-import * as bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 class AuthService {
 	async createUser(email: string, username: string, password: string) {

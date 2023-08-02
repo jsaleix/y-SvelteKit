@@ -20,6 +20,12 @@ export interface CreateTweet {
 	replyTo?: string | null;
 }
 
+export interface createRetweet {
+	creatorId: string;
+	retweetOf: string;
+	content: string;
+}
+
 export interface TweetStatsI {
 	retweets: number;
 	likes: number;

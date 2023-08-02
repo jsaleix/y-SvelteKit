@@ -96,6 +96,7 @@ enum NotificationType {
   REPLY
   FOLLOW
   MENTION
+  RETWEET
 }
 
 enum MediaType {
