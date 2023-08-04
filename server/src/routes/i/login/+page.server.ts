@@ -10,8 +10,7 @@ const performLogin = (cookies: Cookies, user: User) => {
 	cookies.set('sid', sid, { maxAge, path: '/' });
 };
 
-export const load = async ({ locals }) => {
-	console.log('load');
+export const load = async ({ locals }: { locals: App.Locals }) => {
 	isNotConnected(locals, '/');
 };
 
@@ -26,15 +25,10 @@ export const actions = {
 			if (!username || !password) throw new Error('Missing field(s)');
 			const user = await authService.authUser(username, password);
 
-			// set cookie
-			// cookies.set('token', JSON.stringify(user), {
-			// 	maxAge: 60 * 60 * 24 * 7, // 1 week
-			// 	path: '/'
-			// });
 			performLogin(cookies, user);
 		} catch (e: any) {
 			console.log(e.message);
-			return fail(404, { username });
+			return fail(404, { username, error: e.message });
 		}
 		throw redirect(303, '/');
 	}

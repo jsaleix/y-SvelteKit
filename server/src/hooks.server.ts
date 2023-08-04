@@ -17,18 +17,14 @@ export const handle = (async ({ event, resolve }) => {
 				roles: session.roles
 			};
 		} else {
-			// remove invalid/expired/unknown cookie
-			console.log(Object.keys(cookies));
 			cookies.delete('sid');
 		}
 	}
 
-	console.log(cookies.getAll());
 	const response = await resolve(event);
-
 	return response;
 }) satisfies Handle;
 
-export const handleErrors = (async ({ event, error }) => {
-	console.error(error);
+export const handleError = (async ({ event, error }) => {
+	console.log('error');
 }) satisfies HandleServerError;
