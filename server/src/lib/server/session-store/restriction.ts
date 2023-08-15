@@ -9,13 +9,15 @@ export const isAdmin = (locals: App.Locals, redirectTo?: null | string) => {
 };
 
 export const isConnected = (locals: App.Locals, redirectTo?: null | string) => {
-	if (locals?.user) return;
-	if (redirectTo) throw redirect(307, redirectTo ?? '/i/login');
-	throw error(401, 'Unauthorized');
+	if (!locals?.user?.id) {
+		if (redirectTo) throw redirect(307, redirectTo ?? '/i/login');
+		throw error(401, 'Unauthorized');
+	}
 };
 
 export const isNotConnected = (locals: App.Locals, redirectTo?: null | string) => {
-	if (!locals?.user) return;
-	if (redirectTo) throw redirect(307, redirectTo ?? '/i/login');
-	throw error(401, 'Unauthorized');
+	if (locals?.user?.id) {
+		if (redirectTo) throw redirect(307, redirectTo ?? '/i/login');
+		throw error(401, 'Unauthorized');
+	}
 };

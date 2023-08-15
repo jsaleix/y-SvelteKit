@@ -40,6 +40,7 @@ export function createSession(user: User, maxAge: number): string {
 }
 
 export function getSession(sid: Sid): SessionInfo | undefined {
+	console.log('getSession called');
 	const session = sessionStore.get(sid);
 	if (session) {
 		if (Date.now() > session.invalidAt) {
